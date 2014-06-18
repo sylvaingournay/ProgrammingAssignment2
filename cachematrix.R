@@ -1,15 +1,31 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Module to allow matrix inversion caching.
 
-## Write a short comment describing this function
+## Creates a structure containing a matrix and its inverse (if computed),
+## and methods to set/get the matrix and its inverse
 
-makeCacheMatrix <- function(x = matrix()) {
+makeCacheMatrix <- function(mx = matrix()) {
+    s <- NULL
+    set <- function(my) {
+        mx <<- my
+        solve <<- NULL
+    }
+    get <- function() mx
+    setSolve <- function(solve) s <<- solve
+    getSolve <- function() s
 
+    list(set = set, get = get,
+         setSolve = setSolve, getSolve = getSolve)
 }
 
 
-## Write a short comment describing this function
+## Retrieve the inverse of the matrix defined in mx if it has already been
+## computed or compute it
 
-cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+cacheSolve <- function(mx, ...) {
+    if (!is.null(mx$getInvert())) {
+        return(mx$getInvert())
+    }
+    s <- solve(mx$get())
+    mx$setInvert(s)
+    s
 }
